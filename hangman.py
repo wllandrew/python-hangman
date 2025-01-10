@@ -38,10 +38,11 @@ class Hangman:
 			self.initialState = self.HangmanStates[self.stateIndex]
 
 class Game:
-	def __init__(self, word : chr):
+	def __init__(self, word : chr, hints: list[str]):
 		self.hangman = Hangman()
 		self.Word = word.lower()
 		self.SpaceList = ["_ "] * len(self.Word)
+		self.hints = hints
 
 		while True:
 			self.hangman.ShowState()
@@ -74,6 +75,9 @@ class Game:
 		return True
 
 	def ShowWord(self) -> None:
+		for n in range(0, len(self.hints)):
+			print(f"Dica #{n + 1}: {self.hints[n]}")
+		print()
 		print("".join(self.SpaceList).capitalize())
 
 	def ChangeList(self, char : str) -> None:
@@ -88,29 +92,45 @@ class Game:
 			
 class Settings:
 	def __init__(self):
-		diff = int(input("Word size: "))
+		self.wordSize = int(input("Word size: "))
+		self.difficulty = input("Difficulty ( easy/medium/hard ): ")
 		os.system("cls")
 
-		with open("words.txt", 'r') as wordsText:
-			relation = {}
-			for line in wordsText.read().split("\n"):
-				if len(line) in relation:
-					relation[len(line)].append(line)
-				else:
-					relation[len(line)] = [line]
+		with open("word.json", 'r') as file:
+			self.jsonWords = json.load(file)
+		self.JsonOnlyWords = self.jsonWords.keys() 
 
-		self.possibleWords = relation[diff]
+	def ChooseWordAndHint(self) -> str:
+		relation = {}
 
-	def ChooseWord(self) -> str:
+		for word in self.jsonWords:
+			if len(word) in relation:
+				relation[len(word)].append(word)
+			else:
+				relation[len(word)] = [word]
+		
+		self.possibleWords = relation[self.wordSize]
+
 		r = random.randint(0, len(self.possibleWords) - 1)
-		return self.possibleWords[r]
+		chosenWord = self.possibleWords[r]
+		return chosenWord, self.HintType(chosenWord)
+
+	def HintType(self, word : str) -> list[str]:
+		hints = self.jsonWords[word]
+
+		if self.difficulty.lower() == "easy":
+			return hints
+		elif self.difficulty.lower() == "medium":
+			return hints[0:1]
+		return []
 
 def main():
 	while True:
 		try: 
 			os.system('cls')
 			settings = Settings()
-			game = Game(settings.ChooseWord())
+			word, hints = settings.ChooseWordAndHint()
+			game = Game(word, hints)
 			print("Ir novamente(s/n): ")
 			inp = input("")
 			if inp.lower() == 'n': break
