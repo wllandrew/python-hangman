@@ -1,0 +1,22 @@
+{
+	"Um" : ["Número", "Unidade"],
+	"Oi" : ["Saudação", "Empresa"],
+	"Ali" : ["Pronome Demonstrativo", "Lutador"],
+	"Ola" : ["Saudação", ""],
+	"Sei" : ["Verbo", "Conhecer"],
+	"Como" : ["Modo", "Necessidade humana"],
+	"Casa" : ["Construção", "Viver"],
+	"Dado" : ["Cubo", "Jogos"],
+	"Mina" : ["Bomba", "Guerra"],
+	"Moto" : ["Locomoção", "Duas Rodas"],
+	"Luar" : ["Noite", "Luz"],
+	"Lago" : ["Água", "Peixe"],
+	"Pedra" : ["Duro", "Terra"],
+	"Patio" : ["Prisão", "Lugar"],
+	"Tinta" : ["Quadro", "Pintar"],
+	"Quadro" : ["Pintor", "Tinta"],
+	"Setimo" : ["Numeral", "VII"],
+	"Polvilho" : ["Biscoito", "Mandioca"],
+	"Parabens" : ["Bolo", "Aniversário"],
+	"Estrelinha" : ["Diminutivo", "Astro"]
+}

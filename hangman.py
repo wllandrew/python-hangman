@@ -1,5 +1,7 @@
 import random
 import os
+import json
+import time
 
 '''
 First, create the assets
@@ -10,34 +12,30 @@ Second, code the input
 Third, code the game logic.
 '''
 
-# Problema: A logica de perder está errada.
 # Implementação: Lista de letras já inseridas.
-
-HangmanStates = [f"_______\n|     |\n|     0\n|    -|-\n|     A\n|    / {chr(92)}\n|\n",
-				f"_______\n|     |\n|     0\n|    -|\n|     A\n|    / {chr(92)}\n|\n",
-				f"_______\n|     |\n|     0\n|     |\n|     A\n|    / {chr(92)}\n|\n",
-				f"_______\n|     |\n|     0\n|     |\n|     A\n|      {chr(92)}\n|\n",
-				"_______\n|     |\n|     0\n|     |\n|     A\n|\n|\n",
-				"_______\n|     |\n|     0\n|\n|\n|\n|\n",
-				"_______\n|     |\n|\n|\n|\n|\n|\n"]
 
 class Hangman:
 	def __init__(self):
-		self.initialState = HangmanStates[0]
-		self.stateIndex = 0
+		self.HangmanStates = [f"_______\n|     |\n|     0\n|    -|-\n|     A\n|    / {chr(92)}\n|\n",
+							f"_______\n|     |\n|     0\n|    -|\n|     A\n|    / {chr(92)}\n|\n",
+							f"_______\n|     |\n|     0\n|     |\n|     A\n|    / {chr(92)}\n|\n",
+							f"_______\n|     |\n|     0\n|     |\n|     A\n|      {chr(92)}\n|\n",
+							"_______\n|     |\n|     0\n|     |\n|     A\n|\n|\n",
+							"_______\n|     |\n|     0\n|\n|\n|\n|\n",
+							"_______\n|     |\n|\n|\n|\n|\n|\n"]
+		self.stateIndex = len(self.HangmanStates) - 1
+		self.initialState = self.HangmanStates[self.stateIndex] 
 
 	def ShowState(self) -> None:
 		print(self.initialState)
 
 	def CheckState(self) -> bool:
-		if self.stateIndex == len(HangmanStates):
-			return False
-		return True
+		return self.stateIndex == 0
 
 	def ChangeState(self) -> None:
-		self.stateIndex += 1
 		if self.CheckState:
-			self.initialState = HangmanStates[self.stateIndex]
+			self.stateIndex -= 1
+			self.initialState = self.HangmanStates[self.stateIndex]
 
 class Game:
 	def __init__(self, word : chr):
@@ -45,15 +43,30 @@ class Game:
 		self.Word = word.lower()
 		self.SpaceList = ["_ "] * len(self.Word)
 
-		while self.Endgame:
+		while True:
 			self.hangman.ShowState()
 			self.ShowWord()
 			ch = input("Character: ")
 			self.ChangeList(ch)
-			if self.HasWon(): break
+			if self.HasWon(): 
+				self.FinalMessage("You have Won")
+				break
+			if self.HasLost():
+				self.FinalMessage("You have Lost")
+				break
 			os.system('cls')
 
-		print("You have won!")
+	def FinalMessage(self, message : str) -> None:
+		os.system('cls')
+		self.hangman.ShowState()
+		self.ShowWord()
+
+		print(f"\n{message}")
+		time.sleep(3)
+		os.system('cls')
+
+	def HasLost(self):
+		return self.hangman.CheckState()
 
 	def HasWon(self):
 		if "_ " in self.SpaceList:
@@ -62,9 +75,6 @@ class Game:
 
 	def ShowWord(self) -> None:
 		print("".join(self.SpaceList).capitalize())
-
-	def Endgame(self) -> bool:
-		return not self.hangman.CheckState()
 
 	def ChangeList(self, char : str) -> None:
 		char = char.lower()
@@ -97,13 +107,17 @@ class Settings:
 
 def main():
 	while True:
-		os.system('cls')
-		settings = Settings()
-		game = Game(settings.ChooseWord())
-		print("Ir novamente: ")
-		inp = input("")
-		if inp.lower() == 'n': break
-		os.system("cls")
+		try: 
+			os.system('cls')
+			settings = Settings()
+			game = Game(settings.ChooseWord())
+			print("Ir novamente(s/n): ")
+			inp = input("")
+			if inp.lower() == 'n': break
+			os.system("cls")
+		except ValueError:
+			print("Erro! Esse argumento não é um número.")
+			time.sleep(2)
 
 if __name__ == "__main__":
 	main()
