@@ -3,15 +3,6 @@ import os
 import json
 import time
 
-'''
-First, create the assets
-1. list of words
-2. hangman images (follow up: can a abstract them?)
-
-Second, code the input
-Third, code the game logic.
-'''
-
 # Implementação: Lista de letras já inseridas.
 
 class Hangman:
@@ -43,7 +34,11 @@ class Game:
 		self.Word = word.lower()
 		self.SpaceList = ["_ "] * len(self.Word)
 		self.hints = hints
+		self.AlreadyTypedWords = []
 
+		self.GameInit()
+
+	def GameInit(self):
 		while True:
 			self.hangman.ShowState()
 			self.ShowWord()
@@ -70,18 +65,23 @@ class Game:
 		return self.hangman.CheckState()
 
 	def HasWon(self):
-		if "_ " in self.SpaceList:
-			return False
-		return True
+		return not "_ " in self.SpaceList
 
 	def ShowWord(self) -> None:
 		for n in range(0, len(self.hints)):
 			print(f"Dica #{n + 1}: {self.hints[n]}")
-		print()
-		print("".join(self.SpaceList).capitalize())
+
+		print(''.join([u'\u0336{}'.format(c) for c in text]))
+
+		print("\n" + "".join(self.SpaceList).capitalize())
 
 	def ChangeList(self, char : str) -> None:
 		char = char.lower()
+
+		if char in self.AlreadyTypedWords:
+			print("Already used word!")
+			time.sleep(1)
+			return
 
 		if (char not in self.Word) or ((not char.isalpha()) or (len(char) > 1)):
 			self.hangman.ChangeState()
@@ -89,6 +89,8 @@ class Game:
 			for n in range(0, len(self.Word)):
 				if self.Word[n].lower() == char:
 					self.SpaceList[n] = f"{char} "
+
+		self.AlreadyTypedWords.append(char)
 			
 class Settings:
 	def __init__(self):
@@ -121,7 +123,7 @@ class Settings:
 		if self.difficulty.lower() == "easy":
 			return hints
 		elif self.difficulty.lower() == "medium":
-			return hints[0:1]
+			return hints[0]
 		return []
 
 def main():
