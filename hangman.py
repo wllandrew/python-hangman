@@ -3,8 +3,6 @@ import os
 import json
 import time
 
-# Implementação: Lista de letras já inseridas.
-
 class Hangman:
 	def __init__(self):
 		self.HangmanStates = [f"_______\n|     |\n|     0\n|    -|-\n|     A\n|    / {chr(92)}\n|\n",
@@ -34,7 +32,7 @@ class Game:
 		self.Word = word.lower()
 		self.SpaceList = ["_ "] * len(self.Word)
 		self.hints = hints
-		self.AlreadyTypedWords = []
+		self.AlreadyTypedChar = []
 
 		self.GameInit()
 
@@ -42,13 +40,13 @@ class Game:
 		while True:
 			self.hangman.ShowState()
 			self.ShowWord()
-			ch = input("Character: ")
+			ch = input("Letra: ")
 			self.ChangeList(ch)
 			if self.HasWon(): 
-				self.FinalMessage("You have Won")
+				self.FinalMessage("Você ganhou!")
 				break
 			if self.HasLost():
-				self.FinalMessage("You have Lost")
+				self.FinalMessage("Você perdeu.")
 				break
 			os.system('cls')
 
@@ -71,15 +69,15 @@ class Game:
 		for n in range(0, len(self.hints)):
 			print(f"Dica #{n + 1}: {self.hints[n]}")
 
-		print(''.join([u'\u0336{}'.format(c) for c in text]))
+		print("\nCaracteres já utilizados: " + ' '.join(self.AlreadyTypedChar))
 
 		print("\n" + "".join(self.SpaceList).capitalize())
 
 	def ChangeList(self, char : str) -> None:
 		char = char.lower()
 
-		if char in self.AlreadyTypedWords:
-			print("Already used word!")
+		if char in self.AlreadyTypedChar:
+			print("Esse caracter já foi utilizado!")
 			time.sleep(1)
 			return
 
@@ -90,12 +88,12 @@ class Game:
 				if self.Word[n].lower() == char:
 					self.SpaceList[n] = f"{char} "
 
-		self.AlreadyTypedWords.append(char)
+		self.AlreadyTypedChar.append(char)
 			
 class Settings:
 	def __init__(self):
-		self.wordSize = int(input("Word size: "))
-		self.difficulty = input("Difficulty ( easy/medium/hard ): ")
+		self.wordSize = int(input("Tamanho da palavra: "))
+		self.difficulty = input("Dificuldade ( facil/medio/dificil ): ")
 		os.system("cls")
 
 		with open("word.json", 'r') as file:
@@ -120,11 +118,14 @@ class Settings:
 	def HintType(self, word : str) -> list[str]:
 		hints = self.jsonWords[word]
 
-		if self.difficulty.lower() == "easy":
+		if self.difficulty.lower() == "facil":
 			return hints
-		elif self.difficulty.lower() == "medium":
+		elif self.difficulty.lower() == "medio":
 			return hints[0]
-		return []
+		elif self.difficulty.lower() == "dificil":
+			return []
+
+		raise Exception("Dificuldade inválida!")
 
 def main():
 	while True:
@@ -139,6 +140,9 @@ def main():
 			os.system("cls")
 		except ValueError:
 			print("Erro! Esse argumento não é um número.")
+			time.sleep(2)
+		except Exception:
+			print("Erro! Essa dificuldade não é válida.")
 			time.sleep(2)
 
 if __name__ == "__main__":
