@@ -146,10 +146,12 @@ def main():
 			print("Ir novamente(s/n): ")
 			inp = input("")
 			if inp.lower() == 'n': break
-			
+		except ValueError:
+			print("Tamanho inválido")
+			time.sleep(1)
 		except Exception as e:
 			print(str(e))
-			time.sleep(2)
+			time.sleep(1)
 
 if __name__ == "__main__":
 	main()
