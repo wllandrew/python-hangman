@@ -41,13 +41,19 @@ class Game:
 			self.hangman.ShowState()
 			self.ShowWord()
 			ch = input("Letra: ")
-			self.ChangeList(ch)
+			try:
+				self.ChangeList(ch)
+			except Exception as e:
+				print(str(e))
+				time.sleep(1)
+			
 			if self.HasWon(): 
 				self.FinalMessage("Você ganhou!")
 				break
 			if self.HasLost():
 				self.FinalMessage("Você perdeu.")
 				break
+				
 			os.system('cls')
 
 	def FinalMessage(self, message : str) -> None:
@@ -75,6 +81,9 @@ class Game:
 
 	def ChangeList(self, char : str) -> None:
 		char = char.lower()
+
+		if len(char) > 1:
+			raise Exception("Argumento inválido")
 
 		if char in self.AlreadyTypedChar:
 			print("Esse caracter já foi utilizado!")
@@ -121,11 +130,11 @@ class Settings:
 		if self.difficulty.lower() == "facil":
 			return hints
 		elif self.difficulty.lower() == "medio":
-			return hints[0]
+			return [hints[0]]
 		elif self.difficulty.lower() == "dificil":
 			return []
 
-		raise Exception("Dificuldade inválida!")
+		raise Exception("Dificuldade inválida")
 
 def main():
 	while True:
@@ -137,12 +146,9 @@ def main():
 			print("Ir novamente(s/n): ")
 			inp = input("")
 			if inp.lower() == 'n': break
-			os.system("cls")
-		except ValueError:
-			print("Erro! Esse argumento não é um número.")
-			time.sleep(2)
-		except Exception:
-			print("Erro! Essa dificuldade não é válida.")
+			
+		except Exception as e:
+			print(str(e))
 			time.sleep(2)
 
 if __name__ == "__main__":
