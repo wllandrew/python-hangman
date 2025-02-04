@@ -105,7 +105,7 @@ class Settings:
 		self.difficulty = input("Dificuldade ( facil/medio/dificil ): ")
 		os.system("cls")
 
-		with open("word.json", 'r') as file:
+		with open("words.json", 'r') as file:
 			self.jsonWords = json.load(file)
 		self.JsonOnlyWords = self.jsonWords.keys() 
 
