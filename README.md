@@ -25,6 +25,9 @@ Bom jogo!
 
 ## Demo
 
-![git-hangman](https://github.com/user-attachments/assets/c0a6ce61-6cbc-4329-b240-06537d6bfe6c)
+<p align="center">
+  ![git-hangman](https://github.com/user-attachments/assets/c0a6ce61-6cbc-4329-b240-06537d6bfe6c)  
+</p>
+
 
 
