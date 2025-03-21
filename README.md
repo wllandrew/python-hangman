@@ -21,7 +21,6 @@ cd python-hangman
 python hangman.py
 ```
 4. O programa irá pedir o tamanho da palavras e depois a dificuldade. Selecione um tamanho de palavra que possua na lista __words.json__ e uma dificuldade válida, sendo que a dificuldade fácil te da duas dicas, medio te dá uma dica e difícil nenhuma.
-5. 
 Bom jogo!
 
 ## Demo
